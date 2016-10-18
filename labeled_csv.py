@@ -11,6 +11,9 @@ taking a peek at the _fields attribute to find correctly label the first line. I
 
 from collections import namedtuple
 import csv
+import re
+from sys import stderr
+
 def _set_label_case(labels, case):
     """ helper function to set labels to correct case. """
     if case is None:
@@ -30,6 +33,14 @@ def _set_label_case(labels, case):
     raise TypeError("""keyword argument 'case' should be one of 
         the following only: 'lower', 'upper', 'title""")
 
+def _remove_whitespace(labels):
+    """ replace all incidents of 1 or more whitespace
+    characters with a single underscore '_' """
+    whitespace = r'[ \t\n\r\x0b\x0c]+'
+    labels = tuple(re.sub(pattern = whitespace, repl = '_', string = label, count = 99) for label in whitespace)
+    return labels
+    
+    return re.sub
 def generate_namedtuples(file, *args, tupleName = 'Column', case = None, **kwargs):
     """ uses the first row of a CSV to yield labeled namedtuples,
     where the labels are taken from the first row of the CSV.
@@ -53,12 +64,16 @@ def generate_namedtuples(file, *args, tupleName = 'Column', case = None, **kwarg
         reader = csv.reader(file, *args, **kwargs)
         labels = next(reader)
         labels = _set_label_case(labels, case)
+        labels = _remove_whitespace(labels)
         _NamedTuple = namedtuple(tupleName, labels)
         for column in reader:
             if len(column) == 0:
                 continue
-            yield _NamedTuple(*column)
-
+            try: 
+                yield _NamedTuple(*column)
+            except AttributeError or TypeError as err:
+                print('error creating namedtuple: data is not uniform.', file = stderr)
+                raise err
 def write_with_labels(file, namedtuples, *args, case = None, **kwargs):
     """ 
     example code:
@@ -76,6 +91,7 @@ def write_with_labels(file, namedtuples, *args, case = None, **kwargs):
         firstItem = next(rows)
         labels = firstItem._fields
         labels = _set_label_case(labels, case)
+        labels = _remove_whitespace(labels)
         writer.writerow(firstItem._fields) # write labels
         # start writing data
         writer.writerow(firstItem)
