@@ -3,11 +3,15 @@
 Written by Eschatons
 
 this is a collection of tools to make writing and reading labeled csvs easier.
-generator functions and naamedtuples are great. the first allows easy IO without extra memory overhead.
-the second allow both positional and key-based indexing without additional processor and memory overhead.
+generator functions and namedtuples are great. the first allows easy IO without 
+extra memory overhead.
 
-these tools read labeled csvs directly to namedtuples, and can write an iterator of namedtuples directly as csvs,
-taking a peek at the _fields attribute to find correctly label the first line. I hope it's helpful!"""
+the second allow both positional and key-based indexing without the additional
+processor and memory overhead of dictionaries or classes.
+
+these tools read labeled csvs directly to namedtuples, and can write an iterator
+of namedtuples directly as csvs, taking a peek at the _fields attribute to find 
+correctly label the first line. I hope it's helpful!"""
 
 from collections import namedtuple
 import csv
