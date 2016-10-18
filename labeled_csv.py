@@ -20,9 +20,10 @@ def _set_label_case(labels, case):
         return labels
     try:
         case = case.lower()
-    except AttributeError as err:
-        raise err("""keyword argument 'case' should be one of 
-        the following only: 'lower', 'upper', 'title""")
+    except AttributeError or TypeError:
+        print("""keyword argument 'case' should be one of 
+        the following only: 'lower', 'upper', 'title""", file = stderr)
+        raise
         
     if case == 'upper':
         return tuple(x.upper() for x in labels)
@@ -71,9 +72,9 @@ def generate_namedtuples(file, *args, tupleName = 'Column', case = None, **kwarg
                 continue
             try: 
                 yield _NamedTuple(*column)
-            except AttributeError or TypeError as err:
+            except AttributeError or TypeError:
                 print('error creating namedtuple: data is not uniform.', file = stderr)
-                raise err
+                raise
 def write_with_labels(file, namedtuples, *args, case = None, **kwargs):
     """ 
     example code:
