@@ -38,10 +38,10 @@ def _remove_whitespace(labels):
     """ replace all incidents of 1 or more whitespace
     characters with a single underscore '_' """
     whitespace = r'[ \t\n\r\x0b\x0c]+'
-    labels = tuple(re.sub(pattern = whitespace, repl = '_', string = label, count = 99) for label in whitespace)
+    labels = tuple(re.sub(pattern = whitespace, repl = '_', 
+                          string = label, count = 99) for label in whitespace)
     return labels
     
-    return re.sub
 def generate_namedtuples(file, *args, tupleName = 'Column', case = None, **kwargs):
     """ uses the first row of a CSV to yield labeled namedtuples,
     where the labels are taken from the first row of the CSV.
