@@ -39,7 +39,7 @@ def _remove_whitespace(labels):
     characters with a single underscore '_' """
     whitespace = r'[ \t\n\r\x0b\x0c]+'
     labels = tuple(re.sub(pattern = whitespace, repl = '_', 
-                          string = label, count = 99) for label in whitespace)
+                          string = label, count = 99) for label in labels)
     return labels
     
 def generate_namedtuples(file, *args, tupleName = 'Column', case = None, **kwargs):
